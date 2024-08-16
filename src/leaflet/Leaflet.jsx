@@ -1,15 +1,18 @@
 import React, { useEffect, useRef, useState } from 'react';
 import "leaflet/dist/leaflet.css";
 import "leaflet-draw/dist/leaflet.draw.css";
-import { MapContainer, TileLayer, Marker, Popup, Polygon } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, Polygon, FeatureGroup, useMap } from 'react-leaflet';
+import { EditControl } from 'react-leaflet-draw';
 import L from 'leaflet';
 import 'leaflet-draw';
+import LeafletDraw from './Draw/LeafletDraw';
+import PolygonDrawer from './Draw/polygonDrawCustom';
 
 const Leaflet = () => {
   const mapRef = useRef(null);
   const [isDrawing, setIsDrawing] = useState(false);
   const [drawnShapes, setDrawnShapes] = useState([]);
-  
+
   // Define the coordinates for the polygon
   const polygonCoordinates = [
     [51.51, -0.1],
@@ -19,46 +22,7 @@ const Leaflet = () => {
     [51.5, -0.1],
   ];
 
-  useEffect(() => {
-    const map = mapRef.current;
 
-    if (!map) return;
-
-    const drawnItems = new L.FeatureGroup();
-    map.addLayer(drawnItems);
-
-    const drawControl = new L.Control.Draw({
-      edit: {
-        featureGroup: drawnItems,
-      },
-      draw: {
-        polygon: true,
-        polyline: true,
-        rectangle: true,
-        circle: true,
-        marker: true,
-      },
-    });
-
-    if (isDrawing) {
-      map.addControl(drawControl);
-    } else {
-      map.removeControl(drawControl);
-    }
-
-    map.on(L.Draw.Event.CREATED, (event) => {
-      const layer = event.layer;
-      drawnItems.addLayer(layer);
-
-      // Save the shape data
-      const shapeData = layer.toGeoJSON();
-      setDrawnShapes((prevShapes) => [...prevShapes, shapeData]);
-    });
-
-    return () => {
-      map.off(L.Draw.Event.CREATED);
-    };
-  }, [isDrawing]);
 
   const handleDrawClick = () => {
     setIsDrawing(!isDrawing);
@@ -66,15 +30,19 @@ const Leaflet = () => {
 
   return (
     <>
-      <div>Leaflet</div>
+      <div>
+        <strong>
+          Leaflet MAP 1
+        </strong>
+      </div>
       <button onClick={handleDrawClick}>
         {isDrawing ? 'Stop Drawing' : 'Start Drawing'}
       </button>
       <MapContainer
         center={[51.505, -0.09]}
         zoom={13}
-        scrollWheelZoom={true}
-        style={{ height: '100vh', width: '100%' }}
+        scrollWheelZoom={false}
+        style={{ height: '80vh', width: '100%' }}
         whenCreated={(map) => {
           mapRef.current = map;
         }}
@@ -89,6 +57,11 @@ const Leaflet = () => {
           </Popup>
         </Marker>
         <Polygon positions={polygonCoordinates} color="purple" />
+        <div className='leaflet-draw'>
+
+          <LeafletDraw drawnShapes={drawnShapes} setDrawnShapes={setDrawnShapes} />
+        </div>
+        <PolygonDrawer />
       </MapContainer>
 
       <div>
