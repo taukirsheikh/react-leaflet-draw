@@ -1,6 +1,7 @@
 import React from 'react'
 import Leaflet from './leaflet/Leaflet'
 import MapWithCustomPolygonButton from './leaflet/custom draw/MapWithCustomPolygonButton'
+import CustomDrawSecond from './leaflet/customDraw2/customPolygonDraw'
  const App = () => {
   return (
     <>
@@ -8,6 +9,7 @@ import MapWithCustomPolygonButton from './leaflet/custom draw/MapWithCustomPolyg
 
       <Leaflet />
       <MapWithCustomPolygonButton/>
+      {/* <CustomDrawSecond/> */}
     </div>
     </>
   )

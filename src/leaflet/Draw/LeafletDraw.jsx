@@ -26,8 +26,8 @@ const LeafletDraw = ({ setDrawnShapes, drawnShapes }) => {
         }}
         edit={{
           // featureGroup:editableLayers,
-          edit:false,
-          remove:false
+          // edit:true,
+          remove:true
         }}
         
         onCreated={(e) => {

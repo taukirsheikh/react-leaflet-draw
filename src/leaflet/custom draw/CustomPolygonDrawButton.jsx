@@ -1,6 +1,6 @@
 import React from 'react';
 
-const CustomPolygonDrawButton = ({ onClick, position }) => {
+const CustomPolygonDrawButton = ({ onClick, position, setShowSaveCancelButton }) => {
   const style = position === 'topright' ? topright : null;
   return (
     <button onClick={onClick} style={style}>
